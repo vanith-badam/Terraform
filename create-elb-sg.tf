@@ -1,6 +1,3 @@
-provider "aws" {
-        region = "us-east-1"
-}
 resource "aws_security_group" "elb-sg" {
         name = "elb-sg"
         description = "Security group for ELB allowing HTTP & HTTPS access"
