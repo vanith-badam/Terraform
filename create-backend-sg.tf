@@ -49,4 +49,15 @@ resource "aws_security_group" "backend-sg" {
 		ipv6_cidr_blocks = ["::/0"]
 	}
 
+	ingress {
+		description = "Allow app01"
+		from_port = 0
+  		to_port = 0
+		protocol = "-1"
+		security_groups = [aws_security_group.app-sg.id]
+ 	}
+
 }
+
+
+

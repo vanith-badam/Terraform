@@ -13,7 +13,7 @@
 #}
 
 
-resource "aws_instance" "tomcat-instance" {
+resource "aws_instance" "app01-instance" {
 	ami = "ami-020cba7c55df1f615" # Ubuntu Server 24.04 LTS
 	instance_type = "t3.micro" # Free Tire
 	subnet_id = data.aws_subnets.default.ids[0] # Select any 1st subnet
@@ -22,7 +22,7 @@ resource "aws_instance" "tomcat-instance" {
 	key_name = "virginia"
 	
 	tags = {
-		Name = "tomcat-instance"
+		Name = "app01-instance"
 		Environment = "Staging"
 	}
 	
@@ -35,3 +35,11 @@ resource "aws_instance" "tomcat-instance" {
 
 		EOF
 }
+
+resource "aws_route53_record" "app01-instance" {
+        zone_id = aws_route53_zone.vanith_online.zone_id
+        name = "app01-instance.vanith.online"
+        type = "A"
+        ttl = 300
+        records = [aws_instance.app01-instance.private_ip]
+        }

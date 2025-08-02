@@ -38,3 +38,10 @@ resource "aws_instance" "mc01-instance" {
 		sudo memcached -p 11211 -U 11111 -u memcached -d
 		EOF
 }
+resource "aws_route53_record" "mc01-instance" {
+        zone_id = aws_route53_zone.vanith_online.zone_id
+        name = "mc01-instance.vanith.online"
+        type = "A"
+        ttl = 300
+        records = [aws_instance.mc01-instance.private_ip]
+}

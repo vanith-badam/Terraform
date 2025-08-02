@@ -53,3 +53,10 @@ resource "aws_instance" "rmq01-instance" {
 		EOF
 
 }
+resource "aws_route53_record" "rmq01-instance" {
+        zone_id = aws_route53_zone.vanith_online.zone_id
+        name = "rmq01-instance.vanith.online"
+        type = "A"
+        ttl = 300
+        records = [aws_instance.rmq01-instance.private_ip]
+        }
