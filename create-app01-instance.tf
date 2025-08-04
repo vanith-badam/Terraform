@@ -18,6 +18,7 @@ resource "aws_instance" "app01-instance" {
 	instance_type = "t3.micro" # Free Tire
 	subnet_id = data.aws_subnets.default.ids[0] # Select any 1st subnet
 	vpc_security_group_ids = [aws_security_group.app-sg.id]
+	iam_instance_profile = aws_iam_instance_profile.s3_admin_profile.name
 
 	key_name = "virginia"
 	
