@@ -26,16 +26,25 @@ resource "aws_instance" "app01-instance" {
 		Name = "app01-instance"
 		Environment = "Staging"
 	}
-	
 	user_data = <<-EOF
-		#!/bin/bash
-		sudo apt update
-		sudo apt upgrade -y
-		sudo apt install openjdk-17-jdk -y
-		sudo apt install tomcat10 tomcat10-admin tomcat10-docs tomcat10-common git -y
-
-		EOF
-}
+            #!/bin/bash
+            set -e
+            sudo apt update
+            sudo apt upgrade -y
+            sudo apt install -y openjdk-17-jdk tomcat10 tomcat10-admin tomcat10-docs tomcat10-common git unzip curl
+            # Install AWS CLI v2
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            sudo ./aws/install
+            # Download WAR from S3 and deploy to Tomcat
+            aws s3 cp s3://las-artifacts-vanith/vprofile-v2.war /tmp/vprofile-v2.war
+            sudo systemctl stop tomcat10.service
+            sudo rm -rf /var/lib/tomcat10/webapps/ROOT
+            sudo cp /tmp/vprofile-v2.war /var/lib/tomcat10/webapps/ROOT.war
+            sudo systemctl start tomcat10.service
+            ls -l /var/lib/tomcat10/webapps/
+            EOF
+}	
 
 resource "aws_route53_record" "app01-instance" {
         zone_id = aws_route53_zone.vanith_online.zone_id

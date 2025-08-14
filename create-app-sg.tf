@@ -3,7 +3,7 @@ resource "aws_security_group" "app-sg" {
         description = "Security Group for App server"
         vpc_id = "vpc-0e15358781b7d4bce" # Default VPC
         tags = {
-                Name = "spp-sg"
+                Name = "app-sg"
         }
 
         ingress {
